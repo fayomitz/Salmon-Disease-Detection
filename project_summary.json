@@ -1,0 +1,225 @@
+{
+  "project_info": {
+    "title": "Salmon Disease Detection using CNN",
+    "course": "IND310 - Aquaculture05",
+    "date": "2025",
+    "dataset": "SalmonScan",
+    "total_images": 1208,
+    "fresh_images": 456,
+    "infected_images": 752,
+    "train_test_split": "80/20"
+  },
+  "data_split": {
+    "training_samples": 966,
+    "test_samples": 242,
+    "training_fresh": 365,
+    "training_infected": 601,
+    "test_fresh": 91,
+    "test_infected": 151
+  },
+  "training_config": {
+    "image_width": 400,
+    "image_height": 166,
+    "image_channels": 3,
+    "batch_size": 16,
+    "max_epochs": 50,
+    "learning_rate": 0.001,
+    "optimizer": "Adam",
+    "loss_function": "binary_crossentropy"
+  },
+  "models": {
+    "Model_1": {
+      "type": "cnn",
+      "architecture": {
+        "conv_layers": 1,
+        "total_parameters": 135989761,
+        "epochs_trained": 17
+      },
+      "performance": {
+        "accuracy": 0.8760330578512396,
+        "precision": 0.8497109826589595,
+        "recall": 0.9735099337748344,
+        "f1_score": 0.9074074074074074,
+        "auc_roc": 0.9060475947893166,
+        "specificity": 0.7142857142857143
+      },
+      "confusion_matrix": {
+        "true_negatives": 65,
+        "false_positives": 26,
+        "false_negatives": 4,
+        "true_positives": 147
+      },
+      "six_sigma": {
+        "infected_sigma_level": 1.9350828275345227,
+        "infected_dpmo": 26490.06622516559,
+        "overall_sigma_level": 1.1553823552329274,
+        "overall_dpmo": 123966.94214876037,
+        "cpk": 0.12539246564387982,
+        "false_negatives": 4
+      }
+    },
+    "Model_2": {
+      "type": "cnn",
+      "architecture": {
+        "conv_layers": 2,
+        "total_parameters": 67195713,
+        "epochs_trained": 26
+      },
+      "performance": {
+        "accuracy": 0.9090909090909091,
+        "precision": 0.8816568047337278,
+        "recall": 0.9867549668874173,
+        "f1_score": 0.93125,
+        "auc_roc": 0.9452004948693691,
+        "specificity": 0.7802197802197802
+      },
+      "confusion_matrix": {
+        "true_negatives": 71,
+        "false_positives": 20,
+        "false_negatives": 2,
+        "true_positives": 149
+      },
+      "six_sigma": {
+        "infected_sigma_level": 2.2189508835295757,
+        "infected_dpmo": 13245.033112582738,
+        "overall_sigma_level": 1.3351777361189363,
+        "overall_dpmo": 90909.09090909094,
+        "cpk": 0.10540925533894603,
+        "false_negatives": 2
+      }
+    },
+    "Model_3": {
+      "type": "cnn",
+      "architecture": {
+        "conv_layers": 3,
+        "total_parameters": 32863681,
+        "epochs_trained": 19
+      },
+      "performance": {
+        "accuracy": 0.8677685950413223,
+        "precision": 0.8940397350993378,
+        "recall": 0.8940397350993378,
+        "f1_score": 0.8940397350993378,
+        "auc_roc": 0.9408340004366494,
+        "specificity": 0.8241758241758241
+      },
+      "confusion_matrix": {
+        "true_negatives": 75,
+        "false_positives": 16,
+        "false_negatives": 16,
+        "true_positives": 135
+      },
+      "six_sigma": {
+        "infected_sigma_level": 1.2483018695946635,
+        "infected_dpmo": 105960.26490066224,
+        "overall_sigma_level": 1.1159049799773453,
+        "overall_dpmo": 132231.40495867768,
+        "cpk": 0.13012000972647106,
+        "false_negatives": 16
+      }
+    },
+    "Model_4": {
+      "type": "cnn",
+      "architecture": {
+        "conv_layers": 4,
+        "total_parameters": 16775873,
+        "epochs_trained": 33
+      },
+      "performance": {
+        "accuracy": 0.8842975206611571,
+        "precision": 0.912751677852349,
+        "recall": 0.9006622516556292,
+        "f1_score": 0.9066666666666666,
+        "auc_roc": 0.9532785095699002,
+        "specificity": 0.8571428571428571
+      },
+      "confusion_matrix": {
+        "true_negatives": 78,
+        "false_positives": 13,
+        "false_negatives": 15,
+        "true_positives": 136
+      },
+      "six_sigma": {
+        "infected_sigma_level": 1.2853342781142731,
+        "infected_dpmo": 99337.74834437082,
+        "overall_sigma_level": 1.1967475721392282,
+        "overall_dpmo": 115702.47933884292,
+        "cpk": 0.12057322417672037,
+        "false_negatives": 15
+      }
+    },
+    "Model_5_Ensemble": {
+      "type": "ensemble",
+      "method": "Weighted Average",
+      "component_models": [
+        "Model_1",
+        "Model_2",
+        "Model_3",
+        "Model_4"
+      ],
+      "performance": {
+        "accuracy": 0.9214876033057852,
+        "precision": 0.8975903614457831,
+        "recall": 0.9867549668874173,
+        "f1_score": 0.9400630914826499,
+        "auc_roc": 0.9526235354049923,
+        "specificity": 0.8131868131868132
+      },
+      "confusion_matrix": {
+        "true_negatives": 74,
+        "false_positives": 17,
+        "false_negatives": 2,
+        "true_positives": 149
+      },
+      "six_sigma": {
+        "infected_sigma_level": 2.2189508835295757,
+        "infected_dpmo": 13245.033112582738,
+        "overall_sigma_level": 1.4151490702935616,
+        "overall_dpmo": 78512.39669421484,
+        "cpk": 0.09729782098848931,
+        "false_negatives": 2
+      }
+    }
+  },
+  "best_model": {
+    "name": "Model_2",
+    "reason": "Highest weighted ranking across all evaluation criteria (Recall prioritized)",
+    "model_file": "Model_2_best.keras",
+    "deployment_note": "Single model deployment"
+  },
+  "dmaic_summary": {
+    "Phase 1: DEFINE": {
+      "Step 1": "Problem Definition - Develop CNN models to classify salmon as Fresh or Infected",
+      "Step 2": "Project Scope - Compare 4 CNN architectures with 1-4 convolutional layers",
+      "Step 3": "Success Criteria - Achieve high accuracy with robust Six Sigma quality metrics",
+      "Output": "Dataset: 1208 images (456 Fresh, 752 Infected), 80/20 train/test split"
+    },
+    "Phase 2: MEASURE": {
+      "Step 4": "Data Collection - Loaded 966 training and 242 test images",
+      "Step 5": "Baseline Metrics - Established performance measurement framework",
+      "Step 6": "Process Capability - Defined accuracy, precision, recall, F1, AUC-ROC metrics",
+      "Output": "Stratified train/test split maintaining class distribution"
+    },
+    "Phase 3: ANALYZE": {
+      "Step 7": "Model Design - Created 4 CNN architectures with increasing complexity",
+      "Step 8": "Model Training - Trained all models with 16 batch size, 50 max epochs",
+      "Step 9": "Performance Analysis - Evaluated all models + ensemble on test set",
+      "Step 10": "Root Cause Analysis - Analyzed why models perform differently",
+      "Step 11": "Six Sigma Calculation - Computed DPMO, Sigma Level, and Cpk for each model",
+      "Step 12": "Statistical Testing - Created control charts and stability analysis",
+      "Output": "Best model: Model_2 with Recall 0.9868 (PRIMARY METRIC)"
+    },
+    "Phase 4: IMPROVE": {
+      "Step 13": "Model Optimization - Identified best performing architecture",
+      "Step 14": "Ensemble Creation - Combined all 4 CNNs using Weighted Average",
+      "Step 15": "Quality Improvement - Achieved 2.22\u03c3 infected detection level",
+      "Output": "Infected DPMO: 13,245 with Model_2"
+    },
+    "Phase 5: CONTROL": {
+      "Step 16": "Best Model Selection - Individual CNN",
+      "Monitoring Plan": "Use control charts to monitor prediction accuracy in production",
+      "Continuous Improvement": "Regular model retraining with new data",
+      "Output": "Best model: Model_2 ready for deployment"
+    }
+  }
+}
