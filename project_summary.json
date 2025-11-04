@@ -4,18 +4,18 @@
     "course": "IND310 - Aquaculture05",
     "date": "2025",
     "dataset": "SalmonScan",
-    "total_images": 1208,
-    "fresh_images": 456,
-    "infected_images": 752,
+    "total_images": 114,
+    "fresh_images": 23,
+    "infected_images": 91,
     "train_test_split": "80/20"
   },
   "data_split": {
-    "training_samples": 966,
-    "test_samples": 242,
-    "training_fresh": 365,
-    "training_infected": 601,
-    "test_fresh": 91,
-    "test_infected": 151
+    "training_samples": 91,
+    "test_samples": 23,
+    "training_fresh": 18,
+    "training_infected": 73,
+    "test_fresh": 5,
+    "test_infected": 18
   },
   "training_config": {
     "image_width": 400,
@@ -33,29 +33,29 @@
       "architecture": {
         "conv_layers": 1,
         "total_parameters": 135989761,
-        "epochs_trained": 17
+        "epochs_trained": 13
       },
       "performance": {
-        "accuracy": 0.8760330578512396,
-        "precision": 0.8497109826589595,
-        "recall": 0.9735099337748344,
-        "f1_score": 0.9074074074074074,
-        "auc_roc": 0.9060475947893166,
-        "specificity": 0.7142857142857143
+        "accuracy": 0.9565217391304348,
+        "precision": 1.0,
+        "recall": 0.9444444444444444,
+        "f1_score": 0.9714285714285714,
+        "auc_roc": 1.0,
+        "specificity": 1.0
       },
       "confusion_matrix": {
-        "true_negatives": 65,
-        "false_positives": 26,
-        "false_negatives": 4,
-        "true_positives": 147
+        "true_negatives": 5,
+        "false_positives": 0,
+        "false_negatives": 1,
+        "true_positives": 17
       },
       "six_sigma": {
-        "infected_sigma_level": 1.9350828275345227,
-        "infected_dpmo": 26490.06622516559,
-        "overall_sigma_level": 1.1553823552329274,
-        "overall_dpmo": 123966.94214876037,
-        "cpk": 0.12539246564387982,
-        "false_negatives": 4
+        "infected_sigma_level": 1.59321881802305,
+        "infected_dpmo": 55555.555555555584,
+        "overall_sigma_level": 1.7116753065097288,
+        "overall_dpmo": 43478.26086956519,
+        "cpk": 0.0710669054518701,
+        "false_negatives": 1
       }
     },
     "Model_2": {
@@ -63,29 +63,29 @@
       "architecture": {
         "conv_layers": 2,
         "total_parameters": 67195713,
-        "epochs_trained": 26
+        "epochs_trained": 20
       },
       "performance": {
-        "accuracy": 0.9090909090909091,
-        "precision": 0.8816568047337278,
-        "recall": 0.9867549668874173,
-        "f1_score": 0.93125,
-        "auc_roc": 0.9452004948693691,
-        "specificity": 0.7802197802197802
+        "accuracy": 0.8695652173913043,
+        "precision": 1.0,
+        "recall": 0.8333333333333334,
+        "f1_score": 0.9090909090909091,
+        "auc_roc": 0.9777777777777779,
+        "specificity": 1.0
       },
       "confusion_matrix": {
-        "true_negatives": 71,
-        "false_positives": 20,
-        "false_negatives": 2,
-        "true_positives": 149
+        "true_negatives": 5,
+        "false_positives": 0,
+        "false_negatives": 3,
+        "true_positives": 15
       },
       "six_sigma": {
-        "infected_sigma_level": 2.2189508835295757,
-        "infected_dpmo": 13245.033112582738,
-        "overall_sigma_level": 1.3351777361189363,
-        "overall_dpmo": 90909.09090909094,
-        "cpk": 0.10540925533894603,
-        "false_negatives": 2
+        "infected_sigma_level": 0.967421566101701,
+        "infected_dpmo": 166666.66666666663,
+        "overall_sigma_level": 1.1243382315686385,
+        "overall_dpmo": 130434.78260869568,
+        "cpk": 0.1290994448735806,
+        "false_negatives": 3
       }
     },
     "Model_3": {
@@ -93,29 +93,29 @@
       "architecture": {
         "conv_layers": 3,
         "total_parameters": 32863681,
-        "epochs_trained": 19
+        "epochs_trained": 16
       },
       "performance": {
-        "accuracy": 0.8677685950413223,
-        "precision": 0.8940397350993378,
-        "recall": 0.8940397350993378,
-        "f1_score": 0.8940397350993378,
-        "auc_roc": 0.9408340004366494,
-        "specificity": 0.8241758241758241
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "auc_roc": 1.0,
+        "specificity": 1.0
       },
       "confusion_matrix": {
-        "true_negatives": 75,
-        "false_positives": 16,
-        "false_negatives": 16,
-        "true_positives": 135
+        "true_negatives": 5,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "true_positives": 18
       },
       "six_sigma": {
-        "infected_sigma_level": 1.2483018695946635,
-        "infected_dpmo": 105960.26490066224,
-        "overall_sigma_level": 1.1159049799773453,
-        "overall_dpmo": 132231.40495867768,
-        "cpk": 0.13012000972647106,
-        "false_negatives": 16
+        "infected_sigma_level": 6.0,
+        "infected_dpmo": 0.0,
+        "overall_sigma_level": 6.0,
+        "overall_dpmo": 0.0,
+        "cpk": Infinity,
+        "false_negatives": 0
       }
     },
     "Model_4": {
@@ -123,34 +123,34 @@
       "architecture": {
         "conv_layers": 4,
         "total_parameters": 16775873,
-        "epochs_trained": 33
+        "epochs_trained": 32
       },
       "performance": {
-        "accuracy": 0.8842975206611571,
-        "precision": 0.912751677852349,
-        "recall": 0.9006622516556292,
-        "f1_score": 0.9066666666666666,
-        "auc_roc": 0.9532785095699002,
-        "specificity": 0.8571428571428571
+        "accuracy": 0.8260869565217391,
+        "precision": 1.0,
+        "recall": 0.7777777777777778,
+        "f1_score": 0.875,
+        "auc_roc": 1.0,
+        "specificity": 1.0
       },
       "confusion_matrix": {
-        "true_negatives": 78,
-        "false_positives": 13,
-        "false_negatives": 15,
-        "true_positives": 136
+        "true_negatives": 5,
+        "false_positives": 0,
+        "false_negatives": 4,
+        "true_positives": 14
       },
       "six_sigma": {
-        "infected_sigma_level": 1.2853342781142731,
-        "infected_dpmo": 99337.74834437082,
-        "overall_sigma_level": 1.1967475721392282,
-        "overall_dpmo": 115702.47933884292,
-        "cpk": 0.12057322417672037,
-        "false_negatives": 15
+        "infected_sigma_level": 0.7647096737863871,
+        "infected_dpmo": 222222.22222222222,
+        "overall_sigma_level": 0.9388143168769032,
+        "overall_dpmo": 173913.04347826086,
+        "cpk": 0.15294382258037453,
+        "false_negatives": 4
       }
     },
     "Model_5_Ensemble": {
       "type": "ensemble",
-      "method": "Weighted Average",
+      "method": "Majority Voting",
       "component_models": [
         "Model_1",
         "Model_2",
@@ -158,33 +158,33 @@
         "Model_4"
       ],
       "performance": {
-        "accuracy": 0.9214876033057852,
-        "precision": 0.8975903614457831,
-        "recall": 0.9867549668874173,
-        "f1_score": 0.9400630914826499,
-        "auc_roc": 0.9526235354049923,
-        "specificity": 0.8131868131868132
+        "accuracy": 1.0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "auc_roc": 1.0,
+        "specificity": 1.0
       },
       "confusion_matrix": {
-        "true_negatives": 74,
-        "false_positives": 17,
-        "false_negatives": 2,
-        "true_positives": 149
+        "true_negatives": 5,
+        "false_positives": 0,
+        "false_negatives": 0,
+        "true_positives": 18
       },
       "six_sigma": {
-        "infected_sigma_level": 2.2189508835295757,
-        "infected_dpmo": 13245.033112582738,
-        "overall_sigma_level": 1.4151490702935616,
-        "overall_dpmo": 78512.39669421484,
-        "cpk": 0.09729782098848931,
-        "false_negatives": 2
+        "infected_sigma_level": 6.0,
+        "infected_dpmo": 0.0,
+        "overall_sigma_level": 6.0,
+        "overall_dpmo": 0.0,
+        "cpk": Infinity,
+        "false_negatives": 0
       }
     }
   },
   "best_model": {
-    "name": "Model_2",
+    "name": "Model_3",
     "reason": "Highest weighted ranking across all evaluation criteria (Recall prioritized)",
-    "model_file": "Model_2_best.keras",
+    "model_file": "Model_3_best.keras",
     "deployment_note": "Single model deployment"
   },
   "dmaic_summary": {
@@ -192,10 +192,10 @@
       "Step 1": "Problem Definition - Develop CNN models to classify salmon as Fresh or Infected",
       "Step 2": "Project Scope - Compare 4 CNN architectures with 1-4 convolutional layers",
       "Step 3": "Success Criteria - Achieve high accuracy with robust Six Sigma quality metrics",
-      "Output": "Dataset: 1208 images (456 Fresh, 752 Infected), 80/20 train/test split"
+      "Output": "Dataset: 114 images (456 Fresh, 752 Infected), 80/20 train/test split"
     },
     "Phase 2: MEASURE": {
-      "Step 4": "Data Collection - Loaded 966 training and 242 test images",
+      "Step 4": "Data Collection - Loaded 91 training and 23 test images",
       "Step 5": "Baseline Metrics - Established performance measurement framework",
       "Step 6": "Process Capability - Defined accuracy, precision, recall, F1, AUC-ROC metrics",
       "Output": "Stratified train/test split maintaining class distribution"
@@ -207,19 +207,19 @@
       "Step 10": "Root Cause Analysis - Analyzed why models perform differently",
       "Step 11": "Six Sigma Calculation - Computed DPMO, Sigma Level, and Cpk for each model",
       "Step 12": "Statistical Testing - Created control charts and stability analysis",
-      "Output": "Best model: Model_2 with Recall 0.9868 (PRIMARY METRIC)"
+      "Output": "Best model: Model_3 with Recall 1.0000 (PRIMARY METRIC)"
     },
     "Phase 4: IMPROVE": {
       "Step 13": "Model Optimization - Identified best performing architecture",
-      "Step 14": "Ensemble Creation - Combined all 4 CNNs using Weighted Average",
-      "Step 15": "Quality Improvement - Achieved 2.22\u03c3 infected detection level",
-      "Output": "Infected DPMO: 13,245 with Model_2"
+      "Step 14": "Ensemble Creation - Combined all 4 CNNs using Majority Voting",
+      "Step 15": "Quality Improvement - Achieved 6.00\u03c3 infected detection level",
+      "Output": "Infected DPMO: 0 with Model_3"
     },
     "Phase 5: CONTROL": {
       "Step 16": "Best Model Selection - Individual CNN",
       "Monitoring Plan": "Use control charts to monitor prediction accuracy in production",
       "Continuous Improvement": "Regular model retraining with new data",
-      "Output": "Best model: Model_2 ready for deployment"
+      "Output": "Best model: Model_3 ready for deployment"
     }
   }
 }
