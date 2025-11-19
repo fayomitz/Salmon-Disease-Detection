@@ -8,11 +8,11 @@ Phase 1: DEFINE
   Step 1: Problem Definition - Develop CNN models to classify salmon as Fresh or Infected
   Step 2: Project Scope - Compare 4 CNN architectures with 1-4 convolutional layers
   Step 3: Success Criteria - Achieve high accuracy with robust Six Sigma quality metrics
-  Output: Dataset: 114 images (456 Fresh, 752 Infected), 80/20 train/test split
+  Output: Dataset: 129 images (456 Fresh, 752 Infected), 80/20 train/test split
 
 Phase 2: MEASURE
 ----------------------------------------------------------------------------------------------------
-  Step 4: Data Collection - Loaded 91 training and 23 test images
+  Step 4: Data Collection - Loaded 103 training and 26 test images
   Step 5: Baseline Metrics - Established performance measurement framework
   Step 6: Process Capability - Defined accuracy, precision, recall, F1, AUC-ROC metrics
   Output: Stratified train/test split maintaining class distribution
@@ -25,21 +25,21 @@ Phase 3: ANALYZE
   Step 10: Root Cause Analysis - Analyzed why models perform differently
   Step 11: Six Sigma Calculation - Computed DPMO, Sigma Level, and Cpk for each model
   Step 12: Statistical Testing - Created control charts and stability analysis
-  Output: Best model: Model_3 with Recall 1.0000 (PRIMARY METRIC)
+  Output: Best model: Model_1 with Recall 0.9444 (PRIMARY METRIC)
 
 Phase 4: IMPROVE
 ----------------------------------------------------------------------------------------------------
   Step 13: Model Optimization - Identified best performing architecture
-  Step 14: Ensemble Creation - Combined all 4 CNNs using Majority Voting
-  Step 15: Quality Improvement - Achieved 6.00σ infected detection level
-  Output: Infected DPMO: 0 with Model_3
+  Step 14: Ensemble Creation - Combined all CNNs using Weighted Average
+  Step 15: Quality Improvement - Achieved 1.59σ infected detection level
+  Output: Infected DPMO: 55,556 with Model_1
 
 Phase 5: CONTROL
 ----------------------------------------------------------------------------------------------------
   Step 16: Best Model Selection - Individual CNN
   Monitoring Plan: Use control charts to monitor prediction accuracy in production
   Continuous Improvement: Regular model retraining with new data
-  Output: Best model: Model_3 ready for deployment
+  Output: Best model: Model_1 ready for deployment
 
 
 
@@ -48,26 +48,26 @@ DEPLOYMENT RECOMMENDATIONS AND NEXT STEPS
 ====================================================================================================
 
 1. BEST MODEL SELECTION
-   • Selected Model: Model_3
-   • Test Accuracy: 1.0000 (100.00%)
-   • Infected Detection Sigma: 6.00σ ⭐ PRIMARY
-   • Overall Sigma Level: 6.00σ
-   • Process Capability (Cpk): inf
+   • Selected Model: Model_1
+   • Test Accuracy: 0.9615 (96.15%)
+   • Infected Detection Sigma: 1.59σ ⭐ PRIMARY
+   • Overall Sigma Level: 1.77σ
+   • Process Capability (Cpk): 0.07
 
 2. WHY THIS MODEL PERFORMS BEST
-   • Balanced complexity - not too simple, not too complex
+    • Balanced complexity - not too simple, not too complex
    • Good generalization on test data
-   • Highest Recall (infected detection): 100.0% ⭐ PRIMARY METRIC
-   • Infected Sigma: 6.00σ (quality metric for infected detection)
-   • Best trade-off between precision (1.000) and recall (1.000)
+   • Highest Recall (infected detection): 94.4% ⭐ PRIMARY METRIC
+   • Infected Sigma: 1.59σ (quality metric for infected detection)
+   • Best trade-off between precision (1.000) and recall (0.944)
    • Optimal single model architecture
 
 3. MODEL PERFORMANCE DIFFERENCES
    • Model 1: Too simple, lacks capacity to learn complex features
    • Model 2-3: Progressive improvement with added layers
    • Model 4: Most complex individual CNN, highest individual Recall
-   • Deeper models show diminishing returns
-   • Model_3 achieves optimal balance
+    • Deeper models show diminishing returns
+   • Model_1 achieves optimal balance
 
 4. SIX SIGMA TOOLS UTILITY
    • DPMO (Defects Per Million): Quantifies error rate in industry standard metric
@@ -78,7 +78,7 @@ DEPLOYMENT RECOMMENDATIONS AND NEXT STEPS
 
 5. DEPLOYMENT STEPS
    Step 1: Model Integration
-      - Load saved model: Model_3_best.keras
+      - Load saved model: Model_1_best.keras
       - Create prediction pipeline with preprocessing
       - Implement input validation (image size, format)
    
@@ -101,7 +101,7 @@ DEPLOYMENT RECOMMENDATIONS AND NEXT STEPS
       - Set up automated alerting system
 
 6. RISK MITIGATION
-   • False Negatives (Infected classified as Fresh): 0 cases - Most critical risk
+   • False Negatives (Infected classified as Fresh): 1 cases - Most critical risk
    • False Positives (Fresh classified as Infected): 0 cases - Economic impact
    • Recommendation: Set confidence threshold to minimize false negatives
    • Consider ensemble methods or human-in-the-loop for borderline cases
