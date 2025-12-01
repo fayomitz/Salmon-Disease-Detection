@@ -213,7 +213,6 @@ models/
 references/
 *.md
 *.txt
-*.png
 *.csv
 
 # Latex files
