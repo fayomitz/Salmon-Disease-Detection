@@ -230,6 +230,13 @@ Several limitations inherent to the dataset must be acknowledged:
 
 \section{Data Preparation}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{flow-chart.png}
+    \caption{Methodology overview: The complete pipeline from data preparation through model selection. The SalmonScan dataset combined with stock images undergoes preprocessing and stratified splitting (80\% train, 20\% test), with augmentation applied to training data. Three CNN architectures with varying depths are trained and combined into a soft-voting ensemble. Final model selection is based on metrics evaluated through Six Sigma analysis.}
+    \label{fig:methodology_flowchart}
+\end{figure}
+
 \subsection{Preprocessing Pipeline}
 Data preparation is a critical step in any deep learning pipeline, particularly when dealing with image data. We implemented a standardized preprocessing pipeline to ensure consistency across all inputs.
 \begin{itemize}
@@ -286,7 +293,7 @@ Spatial downsampling is performed with max-pooling layers, which reduce the spat
 \begin{equation}
     z_{i,j} = \max_{(u,v) \in \mathcal{W}_{i,j}} y_{u,v},
 \end{equation}
-where $\mathcal{W}_{i,j}$ denotes the set of indices covered by the pooling window centered at $(i,j)$. This operation provides translational invariance and reduces the number of parameters in subsequent layers.
+where $\mathcal{W}_{i,j}$ denotes the set of indices covered by the pooling window centered at $(i,j)`. This operation provides translational invariance and reduces the number of parameters in subsequent layers.
 
 \subsubsection{Optimization and Loss Function}
 The models were trained to minimize the \textbf{Binary Cross-Entropy} loss function, which quantifies the divergence between the true label $y \in \{0, 1\}$ and the predicted probability $\hat{y} = p(y=1 \mid x)$:
