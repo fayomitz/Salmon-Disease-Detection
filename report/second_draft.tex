@@ -131,7 +131,25 @@ Handled properly, these challenges are surmountable and largely mirror those obs
 \subsection{Problem Statement}
 Current disease detection methods largely rely on manual inspection, which is labor-intensive, subjective, and inherently reactive. Inspections often occur only after mortality rates spike or during stressful handling events like lice counting. This delay allows pathogens to spread within a pen before countermeasures are enacted. Furthermore, manual checks are prone to human error and fatigue, and the physical handling of fish can damage their mucus layer, making them more susceptible to secondary infections.
 
-From an Operations Research and Quality Control (QC) perspective, we frame this as a defect detection process. Here, a "unit" is an individual salmon, and a "defect" is the presence of visible disease symptoms. The operational problem is to design a non-invasive "early warning" system that can screen the population and flag potential "defects" for human intervention.
+From an Operations Research and Quality Control (QC) perspective, we frame this as a defect detection process. Here, a ``unit'' is an individual salmon, and a ``defect'' is the presence of visible disease symptoms. The operational problem is to design a non-invasive ``early warning'' system that can screen the population and flag potential ``defects'' for human intervention.
+
+\subsubsection{Research Questions}
+To guide this study and ensure methodological coherence, we formulate one overarching research question with three supporting sub-questions:
+
+\textbf{Main Research Question:}
+\begin{quote}
+\emph{To what extent can convolutional neural networks provide process capability suitable for pen-level disease screening in Atlantic salmon aquaculture, and how can their performance be translated into actionable quality control metrics for operations managers?}
+\end{quote}
+
+This main question is operationalized through the following sub-questions:
+
+\begin{enumerate}
+    \item \textbf{RQ1 (Model Performance):} What classification accuracy, recall, and precision can CNN architectures achieve for binary (Fresh vs.\ Infected) salmon disease detection on the SalmonScan dataset, and do deeper architectures provide statistically significant improvements over shallow ones?
+    
+    \item \textbf{RQ2 (Quality Metrics Translation):} How can standard machine learning performance metrics (Recall, Precision, F1-Score) be meaningfully translated into Six Sigma process capability indicators (DPMO, Sigma level) to support operational decision-making in aquaculture?
+    
+    \item \textbf{RQ3 (Deployment Viability):} What are the primary technical and organizational barriers to deploying CNN-based disease detection in real-world sea pen environments, and what mitigation strategies can address domain shift between laboratory and operational conditions?
+\end{enumerate}
 
 \subsection{Project Objectives}
 The primary objective of this study is to develop and evaluate a Convolutional Neural Network (CNN) capable of performing binary classification (\emph{Fresh} vs. \emph{Infected}) on images of Atlantic salmon. This model is not intended to replace veterinary diagnosis but to support a "screen-and-refer" decision workflow. In this workflow, the AI acts as a first-line filter, processing large volumes of image data to identify high-risk individuals for expert review.
@@ -293,8 +311,7 @@ Spatial downsampling is performed with max-pooling layers, which reduce the spat
 \begin{equation}
     z_{i,j} = \max_{(u,v) \in \mathcal{W}_{i,j}} y_{u,v},
 \end{equation}
-where $\mathcal{W}_{i,j}$ denotes the set of indices covered by the pooling window centered at $(i,j)`. This operation provides translational invariance and reduces the number of parameters in subsequent layers.
-
+where $\mathcal{W}_{i,j}$ denotes the set of indices covered by the pooling window centered at $(i,j)$. This operation provides translational invariance and reduces the number of parameters in subsequent layers.
 \subsubsection{Optimization and Loss Function}
 The models were trained to minimize the \textbf{Binary Cross-Entropy} loss function, which quantifies the divergence between the true label $y \in \{0, 1\}$ and the predicted probability $\hat{y} = p(y=1 \mid x)$:
 \begin{equation}
@@ -525,12 +542,38 @@ Ensemble & 22,807 & 3.50 & 3.44 & 0.0 \\
 
 \section{Discussion}
 
-\subsection{Addressing Research Questions}
-Our study aimed to determine if CNNs are "fit-for-use" for salmon disease detection.
-\begin{itemize}
-    \item \emph{Is one model performing differently?} As shown in Section 6, the individual CNN architectures showed no statistically significant differences due to overlapping confidence intervals. The \textbf{Ensemble} achieved the best results through variance reduction, demonstrating the value of model averaging.
-    \item \emph{Are Six Sigma tools helpful?} Yes, but with important caveats. Translating "97.7\% Recall" to "3.5$\sigma$" communicates that the process is adequate for deployment with human oversight but not for fully automated decision-making. The multi-seed approach provides confidence intervals on these metrics, enabling risk-informed deployment decisions.
-\end{itemize}
+\subsection{Addressing the Research Questions}
+This section synthesizes findings from the modelling experiments and Six Sigma analysis to address the research questions formulated in Section~1.7.
+
+\subsubsection{RQ1: Model Performance and Architectural Depth}
+The first research question asked what classification performance CNN architectures can achieve on the SalmonScan dataset, and whether deeper architectures provide statistically significant improvements over shallow ones.
+
+The CNN architectures achieved strong performance, with mean Recall ranging from 93.5\% (Model~3) to 97.9\% (Model~2) and mean Accuracy from 93.2\% (Model~3) to 97.4\% (Ensemble) across 30 random seeds (Table~\ref{tab:performance}). Notably, no statistically significant differences were observed among the three individual architectures. The overlapping confidence intervals (standard deviations of 5.8--12.0\% for Recall) indicate that architectural depth---varying from one to three convolutional blocks---does not materially affect mean performance on this dataset.
+
+This finding carries an important implication: the primary bottleneck is data quantity and quality, not model capacity. With only $N=141$ images, even aggressive data augmentation cannot provide the diversity needed for deeper architectures to learn richer hierarchical features. Model~3 (the deepest) exhibited the highest variance and lowest mean performance, suggesting overfitting on some seeds. The Ensemble model achieved the best overall results (97.7\% mean Recall, lowest variance) through variance reduction via soft voting, demonstrating that combining multiple weak learners is more effective than increasing individual model complexity when data is scarce \citep{BejaniGhatee2021}.
+
+\subsubsection{RQ2: Translation to Six Sigma Quality Metrics}
+The second research question concerned how standard machine learning metrics can be meaningfully translated into Six Sigma process capability indicators to support operational decision-making.
+
+A systematic translation framework was developed that maps ML confusion matrices to Six Sigma indicators (Section~6.3). The key insight is that Recall directly corresponds to Process Yield when the critical defect is defined as a False Negative (missing an infected fish). Using the standard Six Sigma formula with a 1.5$\sigma$ long-term shift \citep{Tsung2023, montgomery2020introduction}, Recall values were converted to Sigma levels. The Ensemble achieved a mean Recall of 97.7\%, translating to DPMO of approximately 22,807 and a Sigma level of 3.50$\sigma$ for infected fish detection, while individual models ranged from 3.01$\sigma$ (Model~3) to 3.53$\sigma$ (Model~2).
+
+This translation is meaningful for several reasons. First, it communicates risk in familiar terms: operations managers understand that a 3$\sigma$ process (93.3\% yield) is the minimum acceptable threshold, while 4$\sigma$ indicates production readiness \citep{Tsung2023}. Second, it enables control chart monitoring: DPMO can be tracked over time using p-charts, with control limits triggering retraining when performance drifts. Third, it facilitates cross-domain benchmarking: comparing the CNN's 3.5$\sigma$ capability against other quality processes (e.g., manual inspection, automated lice counting) becomes straightforward.
+
+An important caveat applies: the 3.5$\sigma$ capability was achieved under idealized conditions (curated dataset, standardized backgrounds). Real-world deployment with domain shift would likely reduce this to 2--3$\sigma$, necessitating the human-in-the-loop workflow described in Section~\ref{sec:deployment}.
+
+\subsubsection{RQ3: Deployment Viability and Domain Shift}
+The third research question addressed the primary barriers to deploying CNN-based disease detection in real-world sea pen environments and potential mitigation strategies.
+
+Four primary barriers were identified. The most significant is the domain shift between ``dry'' training images and underwater operational footage, where light attenuation removes red wavelengths critical for lesion detection and turbidity reduces contrast \citep{10048777, JIAN2021116088}. Domain adaptation techniques such as CycleGAN-based style transfer, or collecting annotated underwater training data, offer potential mitigation pathways.
+
+Infrastructure constraints present a second barrier, as remote fjord locations often lack reliable connectivity for cloud-based inference \citep{BIAZI2023102360}. Edge computing deployment using optimized models on low-power devices like NVIDIA Jetson modules addresses this limitation.
+
+Third, the failure mode analysis revealed potential Clever Hans effects, where background artifacts may contribute to classification decisions rather than actual pathology \citep{Lapuschkin2019}. Environmental standardization combined with ongoing explainability audits using attention-based architectures \citep{10138194} can mitigate this concern.
+
+Finally, organizational acceptance requires stakeholder trust and workflow integration \citep{10.1108/TQM-11-2023-0361}. The ``screen-and-refer'' workflow preserves human authority over treatment decisions, while transparent performance metrics and pilot projects with clear success criteria can build confidence incrementally.
+
+\subsubsection{Summary}
+Returning to the main research question---to what extent CNNs can provide process capability suitable for pen-level disease screening---the evidence supports three conclusions. CNNs can achieve approximately 3.5$\sigma$ process capability under controlled conditions, meeting the minimum threshold for deployment with human oversight. The Six Sigma translation framework successfully bridges ML metrics and operations management language, enabling risk-informed deployment decisions. However, the 4$\sigma$ threshold for fully automated decision-making was not achieved, and significant domain shift challenges remain. These findings support the deployment of CNN-based screening as a decision support tool within a human-in-the-loop workflow, rather than as a replacement for veterinary expertise.
 
 \subsection{The Domain Shift: From Lab to Sea}
 The most significant barrier to the immediate deployment of our model is the "Domain Shift" between the training environment and the operational environment. Our model was trained on the \emph{SalmonScan} dataset, which consists of high-resolution, well-lit images of fish taken out of water ("dry" domain). In contrast, the target deployment environment is a submerged sea pen ("wet" domain).
