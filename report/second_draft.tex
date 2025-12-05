@@ -49,11 +49,27 @@
 \date{\today}
 
 \begin{document}
+
+% Set page numbering to Roman numerals for front matter
+\pagenumbering{roman}
+
 \maketitle
 
 \begin{abstract}
 This study analyzes automated image-based disease detection in Atlantic salmon as an Operations Research problem that integrates supervised classification with statistical quality control and capability analysis in aquaculture. The objective is to evaluate whether convolutional neural networks (CNNs) for \emph{Fresh} versus \emph{Infected} identification can deliver process capability suitable for pen-level decision support. We conduct a modelling study on the public \emph{SalmonScan} dataset, training three baseline CNN architectures and a soft-voting ensemble. Performance is estimated using a multi-seed validation strategy (30 train-test splits) to obtain robust mean metrics and uncertainty estimates. Results are translated into Six Sigma indicators including DPMO and Sigma levels. The ensemble achieved a mean Recall of 97.7\% for infected fish detection, corresponding to approximately a 3.5$\sigma$ process capability level. Notably, the three individual CNN architectures showed no significant differences in mean performance, while the ensemble provided measurable improvement through variance reduction. We discuss significant caveats regarding overfitting and domain shift. The contribution is a transparent bridge from machine learning metrics to capability indices that operations managers already use, enabling control-chart monitoring.
 \end{abstract}
+
+\vspace{0.5cm}
+\noindent\textbf{Repository:} The complete code and data for this project are available at: \url{https://github.com/fayomitz/Salmon-Disease-Detection}
+
+\tableofcontents
+\clearpage
+\listoffigures
+\listoftables
+\clearpage
+
+% Reset page numbering to Arabic numerals starting from 1
+\pagenumbering{arabic}
 
 \section{Business Understanding}
 
@@ -251,7 +267,7 @@ Several limitations inherent to the dataset must be acknowledged:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{flow-chart.png}
-    \caption{Methodology overview: The complete pipeline from data preparation through model selection. The SalmonScan dataset combined with stock images undergoes preprocessing and stratified splitting (80\% train, 20\% test), with augmentation applied to training data. The entire training process is repeated across 10 random seeds to capture variance from data partitioning and model initialization. Three CNN architectures with varying depths are trained and combined into a soft-voting ensemble. Final model selection is based on metrics evaluated through Six Sigma analysis.}
+    \caption{Methodology overview: The complete pipeline from data preparation through model selection. The SalmonScan dataset combined with stock images undergoes preprocessing and stratified splitting (80\% train, 20\% test), with augmentation applied to training data. The entire training process is repeated across 30 random seeds to capture variance from data partitioning and model initialization. Three CNN architectures with varying depths are trained and combined into a soft-voting ensemble. Final model selection is based on metrics evaluated through Six Sigma analysis.}
     \label{fig:methodology_flowchart}
 \end{figure}
 
@@ -288,6 +304,16 @@ The dataset is divided into training (80\%) and test (20\%) sets using stratifie
 To ensure statistical rigor and quantify the variance due to random initialization and data splitting, we repeated the entire training process with \textbf{30 different random seeds} (0 through 29). Each seed controls both the train-test split and the neural network weight initialization, thereby capturing two sources of stochastic variation. The final performance metrics reported are the mean and standard deviation across all 30 runs, providing a robust measure of expected performance and its uncertainty on unseen data.
 
 This approach offers several advantages over K-Fold Cross-Validation for our setting: (1) it provides a clean, held-out test set that is never used during training or hyperparameter tuning, (2) the multiple seeds capture variance from both data partitioning and model initialization, (3) 30 seeds provide sufficient samples to estimate variance reliably, and (4) it enables identification of \emph{consistently difficult images}---samples that are misclassified across multiple seeds and models, revealing systematic failure modes rather than random noise.
+
+\subsection{Use of Artificial Intelligence in Research Process}
+In accordance with academic transparency requirements, we disclose the use of AI assistance throughout this research project. Specifically, AI language models (primarily GitHub Copilot and ChatGPT) were employed in two capacities:
+
+\begin{enumerate}
+    \item \textbf{Code Development:} AI tools assisted in writing and debugging Python code for data preprocessing, model implementation, training loops, and evaluation metrics. While the overall architecture and methodology were designed by the authors, AI assistance accelerated implementation by suggesting code patterns, identifying syntax errors, and providing documentation for TensorFlow/Keras functions.
+    \item \textbf{Text Formulation:} AI tools were used to help formulate and refine sections of this report, particularly for improving clarity, grammar, and academic tone. All technical content, analysis, interpretation of results, and conclusions were developed by the authors. AI suggestions were critically reviewed and edited to ensure accuracy and alignment with our research objectives.
+\end{enumerate}
+
+The final responsibility for all code functionality, methodological choices, results interpretation, and written content remains entirely with the authors. All AI-assisted content was verified against primary sources and validated through independent analysis.
 
 \section{Modeling}
 
