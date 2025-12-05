@@ -53,7 +53,7 @@
 \maketitle
 
 \begin{abstract}
-This study analyzes automated image-based disease detection in Atlantic salmon as an Operations Research problem that integrates supervised classification with statistical quality control and capability analysis in aquaculture. The objective is to evaluate whether convolutional neural networks (CNNs) for \emph{Fresh} versus \emph{Infected} identification can deliver process capability suitable for pen-level decision support. We conduct a modelling study on the public \emph{SalmonScan} dataset, training three baseline CNN architectures and a soft-voting ensemble. Performance is estimated using a multi-seed validation strategy (30 train-test splits) to obtain robust mean metrics and uncertainty estimates. Results are translated into Six Sigma indicators including DPMO and Sigma levels. The ensemble achieved a mean Recall of 97.7\% for infected fish detection, corresponding to approximately a 3.5$\sigma$ process capability level. Notably, the three individual CNN architectures showed no statistically significant differences in mean performance, while the ensemble provided measurable improvement through variance reduction. We discuss significant caveats regarding overfitting and domain shift. The contribution is a transparent bridge from machine learning metrics to capability indices that operations managers already use, enabling control-chart monitoring.
+This study analyzes automated image-based disease detection in Atlantic salmon as an Operations Research problem that integrates supervised classification with statistical quality control and capability analysis in aquaculture. The objective is to evaluate whether convolutional neural networks (CNNs) for \emph{Fresh} versus \emph{Infected} identification can deliver process capability suitable for pen-level decision support. We conduct a modelling study on the public \emph{SalmonScan} dataset, training three baseline CNN architectures and a soft-voting ensemble. Performance is estimated using a multi-seed validation strategy (10 train-test splits) to obtain robust mean metrics and uncertainty estimates. Results are translated into Six Sigma indicators including DPMO and Sigma levels. The ensemble achieved a mean Recall of 97.7\% for infected fish detection, corresponding to approximately a 3.5$\sigma$ process capability level. Notably, the three individual CNN architectures showed no statistically significant differences in mean performance, while the ensemble provided measurable improvement through variance reduction. We discuss significant caveats regarding overfitting and domain shift. The contribution is a transparent bridge from machine learning metrics to capability indices that operations managers already use, enabling control-chart monitoring.
 \end{abstract}
 
 \section{Business Understanding}
@@ -251,7 +251,7 @@ Several limitations inherent to the dataset must be acknowledged:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\textwidth]{flow-chart.png}
-    \caption{Methodology overview: The complete pipeline from data preparation through model selection. The SalmonScan dataset combined with stock images undergoes preprocessing and stratified splitting (80\% train, 20\% test), with augmentation applied to training data. Three CNN architectures with varying depths are trained and combined into a soft-voting ensemble. Final model selection is based on metrics evaluated through Six Sigma analysis.}
+    \caption{Methodology overview: The complete pipeline from data preparation through model selection. The SalmonScan dataset combined with stock images undergoes preprocessing and stratified splitting (80\% train, 20\% test), with augmentation applied to training data. The entire training process is repeated across 10 random seeds to capture variance from data partitioning and model initialization. Three CNN architectures with varying depths are trained and combined into a soft-voting ensemble. Final model selection is based on metrics evaluated through Six Sigma analysis.}
     \label{fig:methodology_flowchart}
 \end{figure}
 
@@ -285,9 +285,9 @@ Each original training image was augmented 10 times, effectively expanding the t
 To obtain a reliable estimate of model performance despite the small sample size, we employed a \textbf{Multi-Seed Stratified Train-Test Split} strategy \citep{s23042333}.
 The dataset is divided into training (80\%) and test (20\%) sets using stratified sampling, which ensures that the ratio of Fresh to Infected fish remains constant in both partitions. This prevents the test set from being unrepresentative of the overall population.
 
-To ensure statistical rigor and quantify the variance due to random initialization and data splitting, we repeated the entire training process with \textbf{thirty different random seeds} (0 through 29). Each seed controls both the train-test split and the neural network weight initialization, thereby capturing two sources of stochastic variation. The final performance metrics reported are the mean and standard deviation across all 30 runs, providing a robust measure of expected performance and its uncertainty on unseen data.
+To ensure statistical rigor and quantify the variance due to random initialization and data splitting, we repeated the entire training process with \textbf{ten different random seeds} (0 through 9). Each seed controls both the train-test split and the neural network weight initialization, thereby capturing two sources of stochastic variation. The final performance metrics reported are the mean and standard deviation across all 10 runs, providing a robust measure of expected performance and its uncertainty on unseen data.
 
-This approach offers several advantages over K-Fold Cross-Validation for our setting: (1) it provides a clean, held-out test set that is never used during training or hyperparameter tuning, (2) the multiple seeds capture variance from both data partitioning and model initialization, (3) 30 seeds provide sufficient samples to estimate variance reliably and perform statistical significance testing, and (4) it enables identification of \emph{consistently difficult images}---samples that are misclassified across multiple seeds and models, revealing systematic failure modes rather than random noise.
+This approach offers several advantages over K-Fold Cross-Validation for our setting: (1) it provides a clean, held-out test set that is never used during training or hyperparameter tuning, (2) the multiple seeds capture variance from both data partitioning and model initialization, (3) 10 seeds provide sufficient samples to estimate variance reliably, and (4) it enables identification of \emph{consistently difficult images}---samples that are misclassified across multiple seeds and models, revealing systematic failure modes rather than random noise.
 
 \section{Modeling}
 
@@ -373,7 +373,7 @@ The training process was rigorously controlled to ensure reproducibility and eff
 \section{Evaluation}
 
 \subsection{Performance Metrics}
-The quantitative results for all models are summarized in Table \ref{tab:performance}. The performance varies across seeds, with the Ensemble achieving the best overall results across the 30 seed experiments.
+The quantitative results for all models are summarized in Table \ref{tab:performance}. The performance varies across seeds, with the Ensemble achieving the best overall results across the 10 seed experiments.
 
 For binary classification, the confusion matrix is defined in terms of True Positives (TP), False Positives (FP), True Negatives (TN), and False Negatives (FN). From these quantities, we compute the standard metrics used throughout this report:
 \begin{align}
@@ -392,7 +392,7 @@ which can be interpreted as the probability that the classifier assigns a higher
 
 \begin{table}[H]
 \centering
-\caption{Comparative Performance Metrics (Mean $\pm$ Std Across 30 Seeds)}
+\caption{Comparative Performance Metrics (Mean $\pm$ Std Across 10 Seeds)}
 \label{tab:performance}
 \tighttabcolsep
 \begin{tabular}{lccccc}
@@ -411,7 +411,7 @@ Ensemble & 0.974 $\pm$ 0.051 & 0.983 $\pm$ 0.031 & 0.977 $\pm$ 0.063 & 0.979 $\p
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{confusion_matrices.png}
-    \caption{Confusion matrices showing mean values across 30 seeds for the four model architectures.}
+    \caption{Confusion matrices showing mean values across 10 seeds for the four model architectures.}
     \label{fig:confusion_matrices}
 \end{figure}
 
@@ -425,7 +425,7 @@ Ensemble & 0.974 $\pm$ 0.051 & 0.983 $\pm$ 0.031 & 0.977 $\pm$ 0.063 & 0.979 $\p
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{statistical_comparison.png}
-    \caption{Statistical comparison of model performance across 30 seeds, showing the distribution of metrics with error bars representing standard deviation.}
+    \caption{Statistical comparison of model performance across 10 seeds, showing the distribution of metrics with error bars representing standard deviation.}
     \label{fig:statistical_comparison}
 \end{figure}
 
@@ -439,7 +439,7 @@ Ensemble & 0.974 $\pm$ 0.051 & 0.983 $\pm$ 0.031 & 0.977 $\pm$ 0.063 & 0.979 $\p
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{roc_curves_all_seeds.png}
-    \caption{ROC curves comparing all three CNN architectures across 30 seeds with mean AUC values. Model 1 achieves the highest mean AUC (0.990), while Models 2 and 3 show comparable performance (0.979). The overlapping confidence bands indicate no statistically significant differences between architectures.}
+    \caption{ROC curves comparing all three CNN architectures across 10 seeds with mean AUC values. Model 1 achieves the highest mean AUC (0.990), while Models 2 and 3 show comparable performance (0.979). The overlapping confidence bands indicate no statistically significant differences between architectures.}
     \label{fig:roc_curves}
 \end{figure}
 
@@ -464,7 +464,7 @@ We explored Gradient-weighted Class Activation Mapping (Grad-CAM) \citep{selvara
 The lack of focused activations does not necessarily indicate poor model behavior---it may reflect that disease indicators in fish images are subtle and distributed (e.g., overall skin texture, coloration patterns) rather than localized to specific lesions. For deployment scenarios, alternative explainability approaches such as attention mechanisms integrated into the architecture \citep{10138194} or prototype-based explanations may be more informative than post-hoc gradient methods.
 
 \subsubsection{Implications for Deployment}
-From a Six Sigma perspective, the multi-seed analysis provides a more honest assessment of process capability than single-split evaluation. The Ensemble achieves approximately a 3.5$\sigma$ level for infected detection---adequate for deployment with human oversight but not the 4$\sigma$ threshold that would indicate a highly reliable automated system. The high variance observed across 30 seeds (5--12\% standard deviation on Recall) underscores the need for continuous monitoring. The failure mode analysis indicates the following mitigation strategies:
+From a Six Sigma perspective, the multi-seed analysis provides a more honest assessment of process capability than single-split evaluation. The Ensemble achieves approximately a 3.5$\sigma$ level for infected detection---adequate for deployment with human oversight but not the 4$\sigma$ threshold that would indicate a highly reliable automated system. The high variance observed across 10 seeds (5--12\% standard deviation on Recall) underscores the need for continuous monitoring. The failure mode analysis indicates the following mitigation strategies:
 \begin{itemize}
     \item \textbf{Data-Level Countermeasures:} Expand the training set with more examples of early-stage lesions, varied lighting, and standardized backgrounds. Synthetic augmentation targeting lesion size, position, and contrast (inspired by \citealp{Shorten2019, MORENOBAREA2020113696}) could further stress-test the model.
     \item \textbf{Process Controls:} In deployment, flag low-confidence predictions for mandatory human review. Such cases can be logged and fed back into a continuous improvement loop consistent with the Analyze and Control phases of DMAIC \citep{10.1108/TQM-11-2023-0361, Tsung2023}.
@@ -510,7 +510,7 @@ The calculated Six Sigma metrics for the "Infected" class are presented in Table
 
 \begin{table}[H]
 \centering
-\caption{Six Sigma Quality Metrics (Mean Across 30 Seeds)}
+\caption{Six Sigma Quality Metrics (Mean Across 10 Seeds)}
 \label{tab:sixsigma}
 \begin{tabular}{lcccc}
 \toprule
@@ -533,10 +533,10 @@ Ensemble & 22,807 & 3.50 & 3.44 & 0.0 \\
 
 \textbf{Interpretation:}
 \begin{itemize}
-    \item \textbf{All models achieve approximately 3$\sigma$ capability:} With 30 seeds providing a more robust estimate, none of the models---including the Ensemble---reaches the 4$\sigma$ threshold previously reported with fewer seeds. The Ensemble achieves the highest Sigma level (3.50$\sigma$) for infected detection, while individual models range from 3.01$\sigma$ (Model 3) to 3.53$\sigma$ (Model 2).
+    \item \textbf{All models achieve approximately 3$\sigma$ capability:} With 10 seeds providing a robust estimate, none of the models---including the Ensemble---reaches the 4$\sigma$ threshold. The Ensemble achieves the highest Sigma level (3.50$\sigma$) for infected detection, while individual models range from 3.01$\sigma$ (Model 3) to 3.53$\sigma$ (Model 2).
     \item \textbf{Model 2} achieved the best individual Infected Sigma level (3.53$\sigma$), slightly outperforming the Ensemble on this metric alone. However, Model 2 has the lowest Overall Sigma (3.13$\sigma$) due to higher False Positive rates, illustrating the trade-off between sensitivity and specificity.
     \item \textbf{Model 3 (Deep)} showed the weakest performance with the highest DPMO (64,912) and lowest Sigma level (3.01$\sigma$). This suggests that the deeper architecture may be overfitting on some seeds, leading to inconsistent performance.
-    \item \textbf{The Ensemble provides the best balance:} While not achieving the highest Infected Sigma, the Ensemble has zero mean False Negatives across 30 seeds and the best Overall Sigma (3.44$\sigma$), making it the most reliable choice for deployment.
+    \item \textbf{The Ensemble provides the best balance:} While not achieving the highest Infected Sigma, the Ensemble has zero mean False Negatives across 10 seeds and the best Overall Sigma (3.44$\sigma$), making it the most reliable choice for deployment.
     \item \textbf{Implication of 3$\sigma$ capability:} A 3$\sigma$ process corresponds to approximately 66,800 DPMO (93.3\% yield), which is considered the minimum acceptable threshold for many industrial processes. While not "world class" (6$\sigma$), it indicates the models can provide meaningful decision support when combined with human oversight.
 \end{itemize}
 
@@ -548,7 +548,7 @@ This section synthesizes findings from the modelling experiments and Six Sigma a
 \subsubsection{RQ1: Model Performance and Architectural Depth}
 The first research question asked what classification performance CNN architectures can achieve on the SalmonScan dataset, and whether deeper architectures provide statistically significant improvements over shallow ones.
 
-The CNN architectures achieved strong performance, with mean Recall ranging from 93.5\% (Model~3) to 97.9\% (Model~2) and mean Accuracy from 93.2\% (Model~3) to 97.4\% (Ensemble) across 30 random seeds (Table~\ref{tab:performance}). Notably, no statistically significant differences were observed among the three individual architectures. The overlapping confidence intervals (standard deviations of 5.8--12.0\% for Recall) indicate that architectural depth---varying from one to three convolutional blocks---does not materially affect mean performance on this dataset.
+The CNN architectures achieved strong performance, with mean Recall ranging from 93.5\% (Model~3) to 97.9\% (Model~2) and mean Accuracy from 93.2\% (Model~3) to 97.4\% (Ensemble) across 10 random seeds (Table~\ref{tab:performance}). Notably, no statistically significant differences were observed among the three individual architectures. The overlapping confidence intervals (standard deviations of 5.8--12.0\% for Recall) indicate that architectural depth---varying from one to three convolutional blocks---does not materially affect mean performance on this dataset.
 
 This finding carries an important implication: the primary bottleneck is data quantity and quality, not model capacity. With only $N=141$ images, even aggressive data augmentation cannot provide the diversity needed for deeper architectures to learn richer hierarchical features. Model~3 (the deepest) exhibited the highest variance and lowest mean performance, suggesting overfitting on some seeds. The Ensemble model achieved the best overall results (97.7\% mean Recall, lowest variance) through variance reduction via soft voting, demonstrating that combining multiple weak learners is more effective than increasing individual model complexity when data is scarce \citep{BejaniGhatee2021}.
 
@@ -604,6 +604,7 @@ While the results are promising, they must be interpreted within the constraints
     \item \textbf{Dataset Bias and Clever Hans Effects:} As highlighted in \cite{Lapuschkin2019} and confirmed by our Grad-CAM analysis, models trained on biased datasets can exploit spurious correlations. Our cross-seed difficult cases analysis identified images where background features may have contributed to misclassification, warranting caution about deployment without environmental standardization.
     \item \textbf{Domain Shift and Generalizability:} The model has only been evaluated on land-based, high-quality images. Domain shift to underwater, turbid environments is likely to degrade performance substantially \citep{10048777, JIAN2021116088}. Until validated on in-situ underwater footage from multiple farms and seasons, the external validity of the reported metrics remains limited.
     \item \textbf{Economic Modelling Simplifications:} The COPQ and ROI examples assume fixed prices, deterministic mortality rates, and immediate, perfect execution of management actions after an alert. In reality, salmon prices are volatile, disease dynamics are stochastic, and managerial responses vary \citep{AUNSMO2010233, IVERSEN2020735089}. A full economic evaluation would require stochastic simulation across a distribution of outbreak scenarios.
+    \item \textbf{Inverted Class Imbalance at Deployment:} Perhaps the most operationally critical limitation is that the training dataset exhibits an imbalance \emph{opposite} to real-world conditions. In the SalmonScan dataset, infected fish constitute 64\% of samples, whereas in a healthy, well-managed sea pen, infected fish may represent fewer than 1\% of the population \citep{NVI_2025_NFHR2024}. This inversion has profound implications for deployment due to the base rate fallacy \citep{montgomery2020introduction}. To illustrate: consider screening 100,000 fish in a pen with 0.5\% true infection rate (500 infected fish). Even with perfect Recall (100\%) and a Specificity of 95\%, the system would correctly flag all 500 infected fish but also generate 4,975 false alarms from the 99,500 healthy fish---yielding a Positive Predictive Value (PPV) of only 9.1\%. With the Ensemble's observed mean Specificity of approximately 97\%, false alarms would decrease but PPV would still be far below test-set Precision. Mitigating this requires: (1) threshold adjustment to increase specificity at the cost of some recall, (2) two-stage screening where flagged fish undergo secondary analysis, or (3) active learning strategies that continuously retrain the model on confirmed cases from operational data to better reflect the true class distribution.
 \end{itemize}
 
 \section{Deployment Recommendations}
@@ -612,11 +613,11 @@ While the results are promising, they must be interpreted within the constraints
 Having discussed the limitations and domain shift challenges, we now present practical recommendations for deploying the model in a real-world setting. These recommendations are informed by both the model's demonstrated capabilities and the significant caveats identified above.
 
 \subsection{Model Selection}
-Based on the multi-seed evaluation results, the \textbf{Ensemble Model} remains the recommended choice for deployment, though the margins are smaller than initially observed with fewer seeds. It achieved the best mean Recall (97.7\%), the best Overall Sigma level (3.44$\sigma$), and critically, zero mean False Negatives across 30 seeds. The soft voting mechanism provides an inherent confidence measure: when all three constituent models agree, confidence is high; disagreement signals borderline cases that may warrant human review.
+Based on the multi-seed evaluation results, the \textbf{Ensemble Model} is the recommended choice for deployment. It achieved the best mean Recall (97.7\%), the best Overall Sigma level (3.44$\sigma$), and critically, zero mean False Negatives across 10 seeds. The soft voting mechanism provides an inherent confidence measure: when all three constituent models agree, confidence is high; disagreement signals borderline cases that may warrant human review.
 
-From a Six Sigma perspective, with 30 seeds providing a more robust estimate, none of the models crosses the 4$\sigma$ threshold that traditionally indicates a highly reliable process. The Ensemble achieves approximately 3.5$\sigma$, which is adequate for deployment \emph{with human oversight} but necessitates the ``screen-and-refer'' workflow described below rather than fully automated decision-making.
+From a Six Sigma perspective, with 10 seeds providing a robust estimate, none of the models crosses the 4$\sigma$ threshold that traditionally indicates a highly reliable process. The Ensemble achieves approximately 3.5$\sigma$, which is adequate for deployment \emph{with human oversight} but necessitates the ``screen-and-refer'' workflow described below rather than fully automated decision-making.
 
-An important finding from the 30-seed analysis is that \textbf{the three individual models show no statistically significant differences} in mean performance. The high variance across seeds (standard deviations of 5--12\%) means their confidence intervals overlap substantially. This suggests that for this small dataset, architectural complexity (1 vs. 2 vs. 3 convolutional blocks) does not materially affect average performance---the limiting factor is the data, not the model capacity.
+An important finding from the 10-seed analysis is that \textbf{the three individual models show no statistically significant differences} in mean performance. The high variance across seeds (standard deviations of 5--12\%) means their confidence intervals overlap substantially. This suggests that for this small dataset, architectural complexity (1 vs. 2 vs. 3 convolutional blocks) does not materially affect average performance---the limiting factor is the data, not the model capacity.
 
 We therefore recommend a single-stage deployment of the \textbf{Ensemble Model}. If computational resources at the edge are severely constrained (e.g., on a low-power embedded device), \textbf{Model 1} (the simplest architecture) provides a reasonable fallback, as it performs comparably to deeper models on average while requiring fewer parameters.
 
@@ -664,7 +665,7 @@ To ensure the system remains reliable over time, we propose using Statistical Pr
 
 \section{Conclusion}
 
-This report has demonstrated that Convolutional Neural Networks can detect external disease symptoms in Atlantic salmon with reasonable precision and recall on a benchmark dataset. Through 30 random train-test splits, the Ensemble achieved a mean Recall of 97.7\% for infected fish detection, corresponding to approximately a 3.5$\sigma$ process capability level. The individual CNN architectures showed no statistically significant differences, with the Ensemble's advantage coming from variance reduction through averaging.
+This report has demonstrated that Convolutional Neural Networks can detect external disease symptoms in Atlantic salmon with reasonable precision and recall on a benchmark dataset. Through 10 random train-test splits, the Ensemble achieved a mean Recall of 97.7\% for infected fish detection, corresponding to approximately a 3.5$\sigma$ process capability level. The individual CNN architectures showed no statistically significant differences, with the Ensemble's advantage coming from variance reduction through averaging.
 
 The 3.5$\sigma$ capability indicates a system adequate for deployment \emph{with human oversight} in a "screen-and-refer" workflow, but not for fully automated decision-making. From a business perspective, the Cost of Poor Quality analysis indicates that even modest improvements in early detection can generate a positive return on investment. Importantly, the finding that model architecture does not significantly affect performance suggests that \textbf{data quantity and quality are the primary bottlenecks}---further improvements will require larger, more diverse training sets rather than deeper networks.
 
